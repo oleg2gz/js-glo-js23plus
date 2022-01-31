@@ -34,6 +34,10 @@ const weekdaysArr = [
   ['Saturday', 'суббота'],
 ]
 
+const lang = 'ru'
+// const lang = 'en'
+// const lang = 'zh'
+
 const renderWeekdays = (lang, dict = weekdaysObj) => {
   if (Array.isArray(dict)) {
     const pos = lang === 'ru' ? 1 : 0
@@ -42,10 +46,6 @@ const renderWeekdays = (lang, dict = weekdaysObj) => {
     weekdaysObj[lang].forEach((day) => console.log(day))
   }
 }
-
-const lang = 'ru'
-// const lang = 'en'
-// const lang = 'zh'
 
 // a) через if
 if (lang === 'ru') {
