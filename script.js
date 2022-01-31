@@ -3,7 +3,7 @@
 /* 1). Переменная lang может принимать 2 значения: 'ru' 'en'.
  Написать условия при котором в зависимости от значения lang будут выводится дни недели на русском или английском языке. Решите задачу */
 
-const weekdaysObj = {
+const weekdays = {
   en: [
     'Sunday',
     'Monday',
@@ -24,27 +24,12 @@ const weekdaysObj = {
   ],
 }
 
-const weekdaysArr = [
-  ['Sunday', 'воскресенье'],
-  ['Monday', 'понедельник'],
-  ['Tuesday', 'вторник'],
-  ['Wednesday', 'среда'],
-  ['Thursday', 'четверг'],
-  ['Friday', 'пятница'],
-  ['Saturday', 'суббота'],
-]
-
 const lang = 'ru'
 // const lang = 'en'
 // const lang = 'zh'
 
-const renderWeekdays = (lang, dict = weekdaysObj) => {
-  if (Array.isArray(dict)) {
-    const pos = lang === 'ru' ? 1 : 0
-    weekdaysArr.forEach((day) => console.log(day[pos]))
-  } else if (typeof dict === 'object' && dict != null) {
-    weekdaysObj[lang].forEach((day) => console.log(day))
-  }
+const renderWeekdays = (lang) => {
+  weekdays[lang].forEach((day) => console.log(day))
 }
 
 // a) через if
@@ -67,7 +52,7 @@ switch (lang) {
 }
 
 // c) через многомерный массив без ифов и switch.
-renderWeekdays(lang, weekdaysArr)
+renderWeekdays(lang)
 
 /* 2) У нас есть переменная namePerson. Если значение этой переменной “Артем” то вывести в консоль “директор”, если значение “Александр” то вывести в консоль “преподаватель”, с любым другим значением вывести в консоль “студент”
  Решить задачу с помощью нескольких тернарных операторов, без использования if или switch. */
