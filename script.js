@@ -1,70 +1,16 @@
 'use strict'
 
-/* 1). Переменная lang может принимать 2 значения: 'ru' 'en'.
- Написать условия при котором в зависимости от значения lang будут выводится дни недели на русском или английском языке. Решите задачу */
+const userString = ' КаЛьКулятор Верстки и другие приключения Шурика'
+// const userString = NaN
 
-const weekdays = {
-  en: [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ],
-  ru: [
-    'воскресенье',
-    'понедельник',
-    'вторник',
-    'среда',
-    'четверг',
-    'пятница',
-    'суббота',
-  ],
+const remakeString = (str) => {
+  if (typeof str !== 'string') {
+    console.warn('Не получена строка для обработки!')
+    return null
+  }
+  str = str.trim()
+
+  return str.length > 30 ? str.substring(0, 30) + '...' : str
 }
 
-const lang = 'ru'
-// const lang = 'en'
-// const lang = 'zh'
-
-const renderWeekdays = (lang) => {
-  weekdays[lang].forEach((day) => console.log(day))
-}
-
-// a) через if
-if (lang === 'ru') {
-  renderWeekdays('ru')
-} else if (lang === 'en') {
-  renderWeekdays('en')
-}
-
-// b) через switch-case
-switch (lang) {
-  case 'ru':
-    renderWeekdays('ru')
-    break
-  case 'en':
-    renderWeekdays('en')
-    break
-  default:
-    console.warn('Unknown language')
-}
-
-// c) через многомерный массив без ифов и switch.
-renderWeekdays(lang)
-
-/* 2) У нас есть переменная namePerson. Если значение этой переменной “Артем” то вывести в консоль “директор”, если значение “Александр” то вывести в консоль “преподаватель”, с любым другим значением вывести в консоль “студент”
- Решить задачу с помощью нескольких тернарных операторов, без использования if или switch. */
-
-const namePerson = 'Артем'
-// const namePerson = 'Александр'
-// const namePerson = 'Олег'
-
-console.log(
-  namePerson === 'Артем'
-    ? 'директор'
-    : namePerson === 'Александр'
-    ? 'преподаватель'
-    : 'студент'
-)
+console.log(remakeString(userString))
