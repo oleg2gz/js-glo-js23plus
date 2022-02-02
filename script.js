@@ -1,16 +1,32 @@
 'use strict'
 
-const userString = ' КаЛьКулятор Верстки и другие приключения Шурика'
-// const userString = NaN
+/* 1) Создать массив arr = []
+— Записать в него 7 любых многозначных чисел в виде строк
+— Вывести в консоль только те, что начинаются с цифры 2 или 4 */
 
-const remakeString = (str) => {
-  if (typeof str !== 'string') {
-    console.warn('Не получена строка для обработки!')
-    return null
+const arr = ['24', '576', '91', '238', '45', '336', '444']
+
+arr.forEach((num) => {
+  if (num[0] === '2' || num[0] === '4') {
+    console.log(num)
   }
-  str = str.trim()
+})
 
-  return str.length > 30 ? str.substring(0, 30) + '...' : str
+/* 2) Вывести в столбик все простые числа от 1 до 100 (сделать при помощи цикла)
+— Рядом с каждым числом написать оба делителя данного числа
+  Например: “Делители этого числа: 1 и n” */
+
+const isPrime = (num) => {
+  let flag = true
+
+  for (let i = 2; i < num; i++) {
+    if (num % i !== 0) continue
+    flag = false
+  }
+  return flag
 }
 
-console.log(remakeString(userString))
+for (let i = 2; i <= 100; i++) {
+  if (!isPrime(i)) continue
+  console.log(`Делители этого числа: 1 и ${i}`)
+}
