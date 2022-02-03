@@ -1,32 +1,82 @@
 'use strict'
 
-/* 1) Создать массив arr = []
-— Записать в него 7 любых многозначных чисел в виде строк
-— Вывести в консоль только те, что начинаются с цифры 2 или 4 */
+const init = () => {
+  let play = confirm('Поиграем?')
 
-const arr = ['24', '576', '91', '238', '45', '336', '444']
-
-arr.forEach((num) => {
-  if (num[0] === '2' || num[0] === '4') {
-    console.log(num)
+  const getUserNumber = (input) => {
+    if (input === null) return null
+    if (!isNaN(parseFloat(input)) && isFinite(input)) {
+      if (input <= 100) return parseFloat(input)
+      return 'limit'
+    }
+    return 'repeat'
   }
-})
 
-/* 2) Вывести в столбик все простые числа от 1 до 100 (сделать при помощи цикла)
-— Рядом с каждым числом написать оба делителя данного числа
-  Например: “Делители этого числа: 1 и n” */
+  const startGame = (value) => {
+    if (!value) return
 
-const isPrime = (num) => {
-  let flag = true
+    const random = Math.floor(Math.random() * 100 + 1)
+    let startNum = getUserNumber(prompt('Угадай число от 1 до 100'))
+    let times = 10
+    let message
+    let newGame
 
-  for (let i = 2; i < num; i++) {
-    if (num % i !== 0) continue
-    flag = false
+    const compareNumbers = (num) => {
+      times--
+
+      if (times <= 0) {
+        message = 'Попытки закончились, хотите сыграть еще?'
+        return
+      }
+
+      if (random === num) {
+        message = 'Поздравляю, Вы угадали!!! Хотели бы сыграть еще?'
+        return
+      }
+
+      if (num === null) {
+        message = 'Хотите сыграть еще?'
+        return
+      }
+
+      if (num === 'repeat') {
+        num = getUserNumber(prompt(`Введи число! Осталось ${times} попыток.`))
+      } else if (num === 'limit') {
+        num = getUserNumber(
+          prompt(`Число должно быть меньше 100! Осталось ${times} попыток.`)
+        )
+      } else if (random > num) {
+        num = getUserNumber(
+          prompt(`Загаданное число больше, осталось ${times} попыток.`)
+        )
+      } else if (random < num) {
+        num = getUserNumber(
+          prompt(`Загаданное число меньше, осталось ${times} попыток.`)
+        )
+      }
+
+      // For testing purposes
+      console.log(`user input: ${num}, random: ${random}`)
+
+      compareNumbers(num)
+    }
+
+    if (startNum === null) {
+      alert('Игра окончена. До следующего раза!')
+      return
+    }
+
+    compareNumbers(startNum, times)
+
+    newGame = confirm(message)
+    startGame(newGame)
   }
-  return flag
+
+  if (!play) {
+    alert('Хорошо, поиграем в следующий раз.')
+    return
+  }
+  startGame(play)
 }
 
-for (let i = 2; i <= 100; i++) {
-  if (!isPrime(i)) continue
-  console.log(`Делители этого числа: 1 и ${i}`)
-}
+init()
