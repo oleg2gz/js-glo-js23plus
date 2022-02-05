@@ -21,13 +21,20 @@ const weekdayStyle = {
     italic: 'font-style: italic;',
     boldItalic: 'font-weight: bold; font-style: italic;',
   },
+  adjustIndex(index) {
+    if (index >= this.weekdays.length) return 0
+    return index
+  },
   show() {
     this.weekdays.forEach((day, i) => {
-      if ((i === new Date().getDate() + 1 && i === 0) || i === 6) {
+      if (
+        i === this.adjustIndex(new Date().getDate() + 1) &&
+        (i === 0 || i === 6)
+      ) {
         this.styleDay(day, 'boldItalic')
       } else if (i === 0 || i === 6) {
         this.styleDay(day, 'italic')
-      } else if (i === new Date().getDate() + 1) {
+      } else if (i === this.adjustIndex(new Date().getDate() + 1)) {
         this.styleDay(day, 'bold')
       } else {
         this.styleDay(day)
