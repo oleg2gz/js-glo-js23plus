@@ -1,82 +1,46 @@
 'use strict'
 
-const init = () => {
-  let play = confirm('Поиграем?')
+/* Создать массив week и записать в него дни недели в виде строк
+- Вывести на экран все дни недели, каждый с новой строчки
+- Выходные дни - курсивом
+- Текущий день - жирным шрифтом(использовать объект даты)
+*/
 
-  const getUserNumber = (input) => {
-    if (input === null) return null
-    if (!isNaN(parseFloat(input)) && isFinite(input)) {
-      if (input <= 100) return parseFloat(input)
-      return 'limit'
-    }
-    return 'repeat'
-  }
-
-  const startGame = (value) => {
-    if (!value) return
-
-    const random = Math.floor(Math.random() * 100 + 1)
-    let startNum = getUserNumber(prompt('Угадай число от 1 до 100'))
-    let times = 10
-    let message
-    let newGame
-
-    const compareNumbers = (num) => {
-      times--
-
-      if (times <= 0) {
-        message = 'Попытки закончились, хотите сыграть еще?'
-        return
+const weekdayStyle = {
+  weekdays: [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ],
+  styles: {
+    bold: 'font-weight: bold;',
+    italic: 'font-style: italic;',
+    boldItalic: 'font-weight: bold; font-style: italic;',
+  },
+  show() {
+    this.weekdays.forEach((day, i) => {
+      if ((i === new Date().getDate() + 1 && i === 0) || i === 6) {
+        this.styleDay(day, 'boldItalic')
+      } else if (i === 0 || i === 6) {
+        this.styleDay(day, 'italic')
+      } else if (i === new Date().getDate() + 1) {
+        this.styleDay(day, 'bold')
+      } else {
+        this.styleDay(day)
       }
-
-      if (random === num) {
-        message = 'Поздравляю, Вы угадали!!! Хотели бы сыграть еще?'
-        return
-      }
-
-      if (num === null) {
-        message = 'Хотите сыграть еще?'
-        return
-      }
-
-      if (num === 'repeat') {
-        num = getUserNumber(prompt(`Введи число! Осталось ${times} попыток.`))
-      } else if (num === 'limit') {
-        num = getUserNumber(
-          prompt(`Число должно быть меньше 100! Осталось ${times} попыток.`)
-        )
-      } else if (random > num) {
-        num = getUserNumber(
-          prompt(`Загаданное число больше, осталось ${times} попыток.`)
-        )
-      } else if (random < num) {
-        num = getUserNumber(
-          prompt(`Загаданное число меньше, осталось ${times} попыток.`)
-        )
-      }
-
-      // For testing purposes
-      console.log(`user input: ${num}, random: ${random}`)
-
-      compareNumbers(num)
-    }
-
-    if (startNum === null) {
-      alert('Игра окончена. До следующего раза!')
-      return
-    }
-
-    compareNumbers(startNum, times)
-
-    newGame = confirm(message)
-    startGame(newGame)
-  }
-
-  if (!play) {
-    alert('Хорошо, поиграем в следующий раз.')
-    return
-  }
-  startGame(play)
+    })
+  },
+  styleDay(day, style) {
+    document.body.insertAdjacentHTML(
+      'beforeend',
+      `<p style="${this.styles[style]}">${day}</p>`
+    )
+    console.log('%c' + day, this.styles[style])
+  },
 }
 
-init()
+weekdayStyle.show()
