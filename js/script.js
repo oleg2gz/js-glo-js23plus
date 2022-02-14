@@ -3,9 +3,8 @@ const headerInput = document.querySelector('.header-input')
 const todoContainer = document.querySelector('.todo-container')
 const todoList = document.querySelector('.todo-list')
 const todoCompleted = document.querySelector('.todo-completed')
+const template = document.querySelector('template')
 let todoData = []
-
-// const todoBtns = document.querySelectorAll('.todo-buttons')
 
 const todoLoad = () => {
   return JSON.parse(localStorage.getItem('todos')) || []
@@ -15,24 +14,31 @@ const todoSave = () => {
   localStorage.setItem('todos', JSON.stringify(todoData))
 }
 
-const todoRender = () => {
-  todoList.innerHTML = ''
-  todoCompleted.innerHTML = ''
-
-  todoData.forEach(({ id, text, completed }) => {
-    const li = document.createElement('li')
-    li.classList.add('todo-item')
-    li.innerHTML = `<span class="text-todo">${text}</span>
-          <div class="todo-buttons">
-            <button class="todo-remove"></button>
-            <button class="todo-complete"></button>
-          </div>`
-    li.dataset.todoId = id
-    completed ? todoCompleted.append(li) : todoList.append(li)
-  })
+const todoRender = ({ id, text, completed }) => {
+  const todoClone = template.content.cloneNode(true)
+  todoClone.querySelector('li').dataset.todoId = id
+  todoClone.querySelector('.text-todo').textContent = text
+  completed ? todoCompleted.append(todoClone) : todoList.append(todoClone)
 }
 
-todoData = todoLoad()
+const todoContainerCleaner = () => {
+  const todos = todoContainer.querySelectorAll('.todo-item') || []
+  todos.forEach((todo) => todo.remove())
+}
+
+const todoHandleComplete = (id) => {
+  const todo = todoData.find((todo) => todo.id === id)
+  todo.completed = !todo.completed
+  todoSave()
+  todoContainerCleaner()
+  todoData.forEach(todoRender)
+}
+
+const todoHandleDelete = (elem, id) => {
+  todoData = todoData.filter((todo) => todo.id !== id)
+  todoSave()
+  elem.remove()
+}
 
 todoControl.addEventListener('submit', (e) => {
   e.preventDefault()
@@ -42,33 +48,24 @@ todoControl.addEventListener('submit', (e) => {
   const newTodo = {
     text: headerInput.value,
     completed: false,
-    id: new Date().valueOf(),
+    id: new Date().valueOf().toString(),
   }
 
   todoData.push(newTodo)
   todoSave()
-  todoRender()
+  todoRender(newTodo)
   headerInput.value = ''
 })
 
 todoContainer.addEventListener('click', (e) => {
-  const target = e.target
+  if (!e.target.closest('.todo-complete, .todo-remove')) return
 
-  if (target.closest('.todo-complete')) {
-    target.completed = !target.completed
-  }
-  if (target.closest('.todo-remove')) {
-    target.closest('.todo-item').remove()
-  }
-  console.log(target)
-  todoSave()
-  todoRender()
+  const todo = e.target.closest('.todo-item')
+  const { todoId } = todo.dataset
+
+  if (e.target.closest('.todo-complete')) todoHandleComplete(todoId)
+  if (e.target.closest('.todo-remove')) todoHandleDelete(todo, todoId)
 })
 
-// '.todo-remove'
-// '.todo-complete
-
-/* 1. Отмечать выполненные дела и перемещать в блок с выполненными делами (по видео)
-4. Удаление дел на кнопку КОРЗИНА */
-
-todoRender()
+todoData = todoLoad()
+todoData.forEach(todoRender)
