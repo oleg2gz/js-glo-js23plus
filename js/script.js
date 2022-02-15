@@ -1,14 +1,12 @@
+'use strict'
+
 const todoControl = document.querySelector('.todo-control')
 const headerInput = document.querySelector('.header-input')
 const todoContainer = document.querySelector('.todo-container')
 const todoList = document.querySelector('.todo-list')
 const todoCompleted = document.querySelector('.todo-completed')
 const template = document.querySelector('template')
-let todoData = []
-
-const todoLoad = () => {
-  return JSON.parse(localStorage.getItem('todos')) || []
-}
+let todoData = JSON.parse(localStorage.getItem('todos')) || []
 
 const todoSave = () => {
   localStorage.setItem('todos', JSON.stringify(todoData))
@@ -67,5 +65,4 @@ todoContainer.addEventListener('click', (e) => {
   if (e.target.closest('.todo-remove')) todoHandleDelete(todo, todoId)
 })
 
-todoData = todoLoad()
 todoData.forEach(todoRender)
