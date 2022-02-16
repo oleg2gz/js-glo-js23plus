@@ -1,68 +1,46 @@
 'use strict'
 
-const todoControl = document.querySelector('.todo-control')
-const headerInput = document.querySelector('.header-input')
-const todoContainer = document.querySelector('.todo-container')
-const todoList = document.querySelector('.todo-list')
-const todoCompleted = document.querySelector('.todo-completed')
-const template = document.querySelector('template')
-let todoData = JSON.parse(localStorage.getItem('todos')) || []
-
-const todoSave = () => {
-  localStorage.setItem('todos', JSON.stringify(todoData))
+const DomElement = function (selector, height, width, bg, fontSize) {
+  this.selector = selector
+  this.height = height
+  this.width = width
+  this.bg = bg
+  this.fontSize = fontSize
 }
 
-const todoRender = ({ id, text, completed }) => {
-  const todoClone = template.content.cloneNode(true)
-  todoClone.querySelector('li').dataset.todoId = id
-  todoClone.querySelector('.text-todo').textContent = text
-  completed ? todoCompleted.append(todoClone) : todoList.append(todoClone)
-}
+DomElement.prototype.createElement = function () {
+  let elem = null
 
-const todoContainerCleaner = () => {
-  const todos = todoContainer.querySelectorAll('.todo-item') || []
-  todos.forEach((todo) => todo.remove())
-}
-
-const todoHandleComplete = (id) => {
-  const todo = todoData.find((todo) => todo.id === id)
-  todo.completed = !todo.completed
-  todoSave()
-  todoContainerCleaner()
-  todoData.forEach(todoRender)
-}
-
-const todoHandleDelete = (elem, id) => {
-  todoData = todoData.filter((todo) => todo.id !== id)
-  todoSave()
-  elem.remove()
-}
-
-todoControl.addEventListener('submit', (e) => {
-  e.preventDefault()
-
-  if (!headerInput.value) return
-
-  const newTodo = {
-    text: headerInput.value,
-    completed: false,
-    id: new Date().valueOf().toString(),
+  if (this.selector[0] === '.') {
+    elem = document.createElement('div')
+    elem.classList.add(this.selector.slice(1))
+  } else if (this.selector[0] === '#') {
+    elem = document.createElement('p')
+    elem.id = this.selector.slice(1)
   }
+  elem.style.cssText = `height: ${this.height}px; width: ${this.width}px; background: ${this.bg}; fontSize: ${this.fontSize}px;`
+  elem.textContent = 'MIROMAX!'
+  document.body.append(elem)
+}
 
-  todoData.push(newTodo)
-  todoSave()
-  todoRender(newTodo)
-  headerInput.value = ''
-})
+const squareMaker = new DomElement('.square', 150, 150, 'red', 18)
+squareMaker.createElement()
 
-todoContainer.addEventListener('click', (e) => {
-  if (!e.target.closest('.todo-complete, .todo-remove')) return
+// пример:
+// если передана строка '.block', то функция конструктор создает элемент с class="block"
 
-  const todo = e.target.closest('.todo-item')
-  const { todoId } = todo.dataset
+// если передана строка '#best', то функция конструктор создает элемент с id =best"
 
-  if (e.target.closest('.todo-complete')) todoHandleComplete(todoId)
-  if (e.target.closest('.todo-remove')) todoHandleDelete(todo, todoId)
-})
+// Внутрь созданного блока записывать любой текст. Метод записи может быть любым.
 
-todoData.forEach(todoRender)
+// 2) Создать новый объект на основе класса DomElement
+
+// 3) Вызвать его метод чтобы создать элемент на странице
+
+// УСЛОЖНЕННОЕ  ЗАДАНИЕ: 1 БАЛЛ
+
+// 1) Используя функцию-конструктор DomElement из основного задания №1, создать квадрат 100 на 100 пикселей. Ему необходимо задать фон(background) любого цвета и свойство position: absolute.
+
+// 2) Поместить его на страницу только после выполнения события DOMContentLoaded. Внутри тега body должно быть только подключение скрипта. (В случае подключения файла скрипта к странице перед закрывающим тэгом body)
+
+// 3) Написать обработчик события для keydown, который будет принимать callback-функцию. Данная функция будет отлавливать нажатие на стрелки клавиатуры. В зависимости от нажатой кнопки(Вверх - стрелка вверх, Влево - стрелка влево, Вправо - стрелка вправо, Вниз - стрелка вниз) наш квадрат будет перемещаться на 10 пикселей при каждом нажатии.
