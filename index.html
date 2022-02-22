@@ -6,6 +6,53 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>JS23</title>
     <script src="./js/script.js" defer></script>
+    <style>
+      main {
+        width: 500px;
+        margin: 0 auto;
+      }
+      section {
+        margin-bottom: 50px;
+      }
+      .cube {
+        position: relative;
+        width: 50px;
+        height: 50px;
+        background-color: salmon;
+      }
+      .circle {
+        background-color: goldenrod;
+        border-radius: 10000px;
+      }
+      button {
+        margin-right: 15px;
+      }
+    </style>
   </head>
-  <body></body>
+  <body>
+    <main>
+      <section class="task1">
+        <p>
+          Программа должна ожидать завершения ввода пользователя и только после
+          этого изменять текст в параграфе.
+        </p>
+        <input type="text" name="" id="user-input" />
+        <p id="input-text"></p>
+      </section>
+      <section class="task2">
+        <p>
+          Кнопка move ставит анимацию на паузу и продолжает анимацию после
+          повторного нажатия на нее.
+        </p>
+        <p>Кнопка reset возвращает анимацию в первоначальное состояние.</p>
+      </section>
+      <section class="cube-field">
+        <div class="cube"></div>
+      </section>
+      <section class="btns">
+        <button class="move">move</button>
+        <button class="reset">reset</button>
+      </section>
+    </main>
+  </body>
 </html>
