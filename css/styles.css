@@ -1,0 +1,27 @@
+* {
+  box-sizing: border-box;
+  font-size: 22px;
+}
+
+form {
+  width: 500px;
+  margin-bottom: 50px;
+}
+
+input {
+  margin-top: 25px;
+}
+
+button {
+  margin-top: 25px;
+}
+
+.success {
+  color: green;
+  border: 2px solid green;
+}
+
+.error {
+  color: red;
+  border: 2px solid red;
+}
