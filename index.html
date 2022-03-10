@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
   <head>
     <meta charset="UTF-8" />
     <meta
@@ -7,34 +7,27 @@
       content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
     />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="stylesheet" href="./css/styles.css" />
+    <style>
+      form {
+        width: 500px;
+        margin: 25px;
+      }
+      div {
+        margin: 50px 0 0 25px;
+      }
+    </style>
     <script src="./js/script.js" defer></script>
-    <title>AJAX Requests</title>
+    <title>Тачки</title>
   </head>
   <body>
-    <form id="form-one">
+    <form>
       <fieldset>
-        <legend>Fetch</legend>
-
-        <input type="text" id="status-one" disabled placeholder="Status" />
-        <label>Status Code</label><br />
-        <input type="text" id="response-one" disabled placeholder="Response" />
-        <label>Result</label><br />
-
-        <button id="form-one" type="submit">Start</button>
+        <legend>Тачки</legend>
+        <select id="cars">
+          <option value="">Выберите тачку</option>
+        </select>
       </fieldset>
     </form>
-    <form id="form-two">
-      <fieldset>
-        <legend>XMLHttpRequest</legend>
-
-        <input type="text" id="status-two" disabled placeholder="Status" />
-        <label>Status Code</label><br />
-        <input type="text" id="response-two" disabled placeholder="Response" />
-        <label>Result</label><br />
-
-        <button id="form-one" type="submit">Start</button>
-      </fieldset>
-    </form>
+    <div id="out">выбери тачку</div>
   </body>
 </html>

@@ -1,32 +1,10 @@
-const formOne = document.getElementById('form-one')
-const formTwo = document.getElementById('form-two')
-const inputStatusOne = document.getElementById('status-one')
-const inputStatusTwo = document.getElementById('status-two')
-const inputResponseOne = document.getElementById('response-one')
-const inputResponseTwo = document.getElementById('response-two')
+const cars = document.getElementById('cars')
+const out = document.getElementById('out')
 
 const db = './db/db.json'
-const url = 'https://jsonplaceholder.typicode.com/posts'
 
-const setStatus = (elem, message, status) => {
-  elem.className = status
-  elem.value = message
-}
-
-const fetchData = (url, method, data) => {
-  let options
-
-  if (data) {
-    options = {
-      method: method,
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-      },
-      body: JSON.stringify(data),
-    }
-  }
-
-  return fetch(url, options).then((res) => {
+const fetchData = (url) => {
+  return fetch(url).then((res) => {
     if (!res.ok) {
       throw new Error(res.status)
     }
@@ -34,68 +12,41 @@ const fetchData = (url, method, data) => {
   })
 }
 
-const handleFetch = (e) => {
-  e.preventDefault()
-
-  fetchData(db)
-    .then((data) => {
-      if (data) {
-        return fetchData(url, 'POST', data)
-      }
-    })
-    .then((_) => {
-      setStatus(inputStatusOne, '201', 'success')
-      setStatus(inputResponseOne, 'Post added', 'success')
-    })
-    .catch((err) => {
-      setStatus(inputStatusOne, err.message, 'error')
-      setStatus(inputResponseOne, 'Network or fetch error', 'error')
-    })
+const printOut = ({ brand, model, price }) => {
+  out.textContent = `Тачка ${brand} ${model}  `
+  out.insertAdjacentHTML('beforeend', `<p>Цена: ${price}$</p>`)
 }
 
-const requestHttpData = (url, method, data = null) => {
-  if (data) {
-    data = JSON.stringify(data)
+const getCarInfo = async (e) => {
+  const model = e.target.options[e.target.selectedIndex].value
+
+  if (!model) {
+    out.textContent = 'выбери тачку'
+    return
   }
-  return new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest()
-    xhr.open(method, url)
-    xhr.responseType = 'json' // 'text'
-    xhr.setRequestHeader('Content-type', 'application/json; charset=UTF-8')
-    xhr.onload = () => {
-      if (xhr.status >= 400) {
-        reject({ status: xhr.status, reason: 'Not Found' })
-      } else {
-        resolve({
-          content: xhr.response,
-          status: xhr.status,
-          reason: 'Post added',
-        })
-      }
-    }
-    xhr.onerror = () => {
-      reject({ status: xhr.status, reason: 'Network error' })
-    }
-    xhr.send(data)
+
+  try {
+    const response = await fetchData(db)
+    const car = response.cars.find((car) => car.model === model)
+    printOut(car)
+  } catch (err) {
+    out.textContent = `Что-то пошло не так: ${err.message}`
+  }
+}
+
+const renderOptions = (data) => {
+  data?.cars?.forEach(({ brand, model }) => {
+    const option = document.createElement('option')
+    option.textContent = brand
+    option.value = model
+    cars.append(option)
   })
 }
 
-const handleXMLHttpRequest = (e) => {
-  e.preventDefault()
+cars.addEventListener('change', getCarInfo)
 
-  requestHttpData(db, 'GET')
-    .then((res) => {
-      return requestHttpData(url, 'POST', res.content)
-    })
-    .then((res) => {
-      setStatus(inputStatusTwo, res.status, 'success')
-      setStatus(inputResponseTwo, res.reason, 'success')
-    })
-    .catch((err) => {
-      setStatus(inputStatusTwo, err.status, 'error')
-      setStatus(inputResponseTwo, err.reason, 'error')
-    })
-}
-
-formOne.addEventListener('submit', handleFetch)
-formTwo.addEventListener('submit', handleXMLHttpRequest)
+fetchData(db)
+  .then(renderOptions)
+  .catch((err) => {
+    out.textContent = `Что-то пошло не так: ${err.message}`
+  })
